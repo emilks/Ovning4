@@ -1,10 +1,20 @@
 ﻿using System;
 
 //Frågor
-//1) 
-//2)
-//3) För att den första använder sig av int som är en value type och den andra använder MyInt som är en referencetype
-//och ...
+//1) Stacken Är en lista som följer först-in sist-ut principen 
+//   Heapen  är ett minnes område där olika objekt kan lagras och tas bort i vilken ordning som helst
+//   Deras namn beskriver dom rätt bra, Stack är en ordnad hög där du bara kan ta bort det översta
+//   objektet, medan heapen är en hög med grejer där du kan ta vilken som helst
+
+//2) Value Types lagras på stacken medan Reference Types lagras på heapen men har en pointer som
+//pekar till det på stacken.
+//Value types är bland annat alla numeriska typer som int, double, etc och char, Date, bool
+//Reference types är bland annat String, alla klasser och alla arrayer 
+
+//3) För att den första använder sig av int som är en value type och den andra använder MyInt som
+//är en referencetype. Int x och y är olika objekt på stacken medan MyInt för MyInt x och y så pekar
+//de på samma objekt på heapen eftersom y=x
+
 
 namespace SkalProj_Datastrukturer_Minne
 {
@@ -19,11 +29,13 @@ namespace SkalProj_Datastrukturer_Minne
 
             while (true)
             {
-                Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 ,4, 0) of your choice"
+                Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 ,4, 5, 6, 0) of your choice"
                     + "\n1. Examine a List"
                     + "\n2. Examine a Queue"
                     + "\n3. Examine a Stack"
                     + "\n4. CheckParanthesis"
+                    + "\n5. CheckRecursion"
+                    + "\n6. CheckIteration"
                     + "\n0. Exit the application");
                 char input = ' '; //Creates the character input to be used with the switch-case below.
                 try
@@ -49,15 +61,17 @@ namespace SkalProj_Datastrukturer_Minne
                     case '4':
                         CheckParanthesis();
                         break;
-                    /*
-                     * Extend the menu to include the recursive 
-                     * and iterative exercises.
-                     */
+                    case '5':
+                        CheckRecursion();
+                        break;
+                    case '6':
+                        CheckIteration();
+                        break;
                     case '0':
                         Environment.Exit(0);
                         break;
                     default:
-                        Console.WriteLine("Please enter some valid input (0, 1, 2, 3, 4)");
+                        Console.WriteLine("Please enter some valid input (0, 1, 2, 3, 4, 5, 6)");
                         break;
                 }
             }
@@ -82,9 +96,10 @@ namespace SkalProj_Datastrukturer_Minne
              * 2) Listans kapacitet ökar när du försöker lägga till ett objekt och listans kapacitet
              *    redan är fylld
              * 3) Kapaciteten startar som 4 och dubblas sedan varje gång den fylls
-             * 4) 
-             * 5) Nej, det gör den inte
-             * 6) 
+             * 4) För att minska antalet nya arrayer som skapas och tas bort
+             * 5) Nej, inte automatiskt.
+             * 6) Om du vet storleken från början är det bättre att använda en array. Det kan 
+             * också vara bättre med array om du vet maximala tillåtna storleken.
              */
 
             bool loop = true;
@@ -170,8 +185,6 @@ namespace SkalProj_Datastrukturer_Minne
                         break;
 
                     case '-':
-                        //theQueue.Dequeue();
-                        //theList.Remove(value);
                         Console.WriteLine($"{theQueue.Dequeue()} removed from the list. " +
                             $"\nThe queue contains {theQueue.Count} elements");
 
@@ -320,6 +333,189 @@ namespace SkalProj_Datastrukturer_Minne
             }
         }
 
+        static void CheckRecursion()
+        {
+            Console.WriteLine("Skriv:" +
+                "\n1) för att testa RecursiveOdd" +
+                "\n2) för att testa RecursiveEven" +
+                "\n3) för att testa Fibonacci");
+            char input = ' '; //Creates the character input to be used with the switch-case below.
+            try
+            {
+                input = Console.ReadLine()![0]; //Tries to set input to the first char in an input line
+            }
+            catch (IndexOutOfRangeException) //If the input line is empty, we ask the users for some input.
+            {
+                Console.Clear();
+                Console.WriteLine("Please enter some input!");
+            }
+            uint siffra = 0;
+
+            switch (input)
+            {
+                case '1':
+                    Console.WriteLine("Skriv ett nummer:");
+                    siffra = checkInt();
+
+                    Console.WriteLine($"RecursiveOdd av {siffra} är {RecursiveOdd(siffra)} ");
+                    break;
+                case '2':
+                    Console.WriteLine("Skriv ett nummer:");
+                    siffra = checkInt();
+
+                    Console.WriteLine($"RecursiveEven av {siffra} är {RecursiveEven(siffra)} ");
+                    break;
+                case '3':
+                    Console.WriteLine("Skriv ett nummer:");
+                    siffra = checkInt();
+
+                    Console.WriteLine($"Fibonacci av {siffra} är {FibonacciRec(siffra)} ");
+                    break;
+                default:
+                    Console.WriteLine("Please enter some valid input (0, 1, 2, 3)");
+                    break;
+            }
+        }
+
+        static int RecursiveOdd(uint n)
+        {
+            if (n == 0)
+            {
+                return 1;
+            }
+
+            return (RecursiveOdd(n - 1) + 2);
+        }
+
+        static int RecursiveEven(uint n)
+        {
+            if(n == 0)
+            {
+                return 2;
+            }
+
+            return (RecursiveEven(n-1) + 2);
+        }
+
+        static int FibonacciRec(uint n)
+        {
+            if(n == 1)
+            {
+                return 1;
+            }else if (n == 0)
+            {
+                return 0;
+            }
+
+            return (FibonacciRec(n-1) + FibonacciRec(n-2));
+        }
+
+        static void CheckIteration()
+        {
+            Console.WriteLine("Skriv:" +
+                "\n1) för att testa IterativeOdd" +
+                "\n2) för att testa IterativeEven" +
+                "\n3) för att testa Fibonacci");
+            string input = Console.ReadLine(); //Tries to set input to the first char in an input line
+
+            uint siffra;
+            switch (input[0])
+            {
+                case '1':
+                    Console.WriteLine("Skriv ett nummer:");
+                    siffra = checkInt();
+
+                    Console.WriteLine($"IterativeOdd av {siffra} är {IterativeOdd(siffra)} ");
+                    break;
+                case '2':
+                    Console.WriteLine("Skriv ett nummer:");
+                    siffra = checkInt();
+
+                    Console.WriteLine($"IterativeEven av {siffra} är {IterativeEven(siffra)} ");
+                    break;
+                case '3':
+                    Console.WriteLine("Skriv ett nummer:");
+                    siffra = checkInt();
+
+                    Console.WriteLine($"Fibonacci av {siffra} är {FibonacciIt(siffra)} ");
+                    break;
+                default:
+                    Console.WriteLine("Please enter some valid input (0, 1, 2, 3)");
+                    break;
+            }
+
+        }
+
+        static int IterativeOdd(uint n)
+        {
+            if (n == 0)
+            {
+                return 1;
+            }
+            int result = 1;
+
+            for (int i = 1; i <= n; i++)
+            {
+                result += 2;
+            }
+            return result;
+        }
+
+        static int IterativeEven(uint n)
+        {
+            if (n == 0)
+            {
+                return 2;
+            }
+            int result = 2;
+
+            for (int i = 1; i <= n; i++)
+            {
+                result += 2;
+            }
+            return result;
+        }
+
+        static int FibonacciIt(uint n)
+        {
+            if (n == 1)
+            {
+                return 1;
+            }
+            int result = 0;
+
+            int minus1 = 1;
+            int minus2 = 0;
+            for (int i = 2; i <= n; i++)
+            {
+                result = minus1 + minus2;
+                minus2 = minus1;
+                minus1 = result;
+            }
+            return result;
+        }
+
+
+        //Övning 6 Fråga
+        //Rekursion använder upp call stacken varje gång den kallar på sig själv så den kommer
+        //vara mindre minnesvänlig speciellt om den går många gånger 
+
+        //Hjälpmetod för att kolla att input är en positiv int
+        public static uint checkInt()
+        {
+            do
+            {
+                var input = Console.ReadLine();
+                if (uint.TryParse(input, out uint answer))
+                {
+                    return answer;
+                }
+                else
+                {
+                    Console.WriteLine("Skriv ett positivt nummer");
+                }
+            } while (true);
+        }
     }
 }
 
