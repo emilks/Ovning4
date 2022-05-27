@@ -200,8 +200,56 @@ namespace SkalProj_Datastrukturer_Minne
              * Create a switch with cases to push or pop items
              * Make sure to look at the stack after pushing and and poping to see how it behaves
             */
+
+            //Stack kommer inte fungera så bra eftersom den person som lades till först kommer
+            //bli den sista att tas bort
+            bool loop = true;
+            Stack<string> theStack = new Stack<string>();
+            Console.WriteLine("Add a input to the stack by typing +input");
+            Console.WriteLine("Remove an item from the stack by typing -");
+            Console.WriteLine("Exit back to the main menu by typing 0");
+            while (loop)
+            {
+                string input = Console.ReadLine();
+                char nav = input[0];
+                string value = input.Substring(1);
+
+                switch (nav)
+                {
+                    case '+':
+                        if (string.IsNullOrEmpty(value.Trim()))
+                        {
+                            Console.WriteLine("Ange en icke tom input");
+                        }
+                        else
+                        {
+                            theStack.Push(value);
+                            Console.WriteLine($"{value} added to the list. " +
+                                $"\nand it contains {theStack.Count} elements");
+                        }
+                        break;
+
+                    case '-':
+                        Console.WriteLine($"{theStack.Pop()} removed from the list. " +
+                            $"\nThe queue contains {theStack.Count} elements");
+
+                        break;
+
+                    case '0':
+                        loop = false;
+                        break;
+                    default:
+                        break;
+                }
+                foreach (var val in theStack)
+                {
+                    Console.WriteLine(val);
+                }
+            }
         }
 
+        //Jag väljer att använda en stack för den här uppgiften eftersom det är den senaste
+        //inmatade parantesen som vi bryr oss om
         static void CheckParanthesis()
         {
             /*
@@ -210,6 +258,66 @@ namespace SkalProj_Datastrukturer_Minne
              * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
              */
 
+            Console.WriteLine("Skriv en sträng med paranteser så kommer funktionen visa om den är välformad.");
+            string input = Console.ReadLine();
+            Stack<char> paranthesis = new Stack<char>();
+            bool exitLoop = false;
+            foreach(char sign in input)
+            {
+                switch (sign)
+                {
+                    case '(':
+                    case '{':
+                    case '[':
+                        paranthesis.Push(sign);
+                        break;
+                    case ')':
+                        if(paranthesis.Count == 0 ||  paranthesis.Peek() != '(')
+                        {
+                            exitLoop = true;
+                        }
+                        else
+                        {
+                            paranthesis.Pop();
+                        }
+                        break;
+                    case '}':
+                        if (paranthesis.Count == 0 || paranthesis.Peek() != '{')
+                        {
+                            exitLoop = true;
+                        }
+                        else
+                        {
+                            paranthesis.Pop();
+                        }
+                        break;
+                    case ']':
+                        if (paranthesis.Count == 0 || paranthesis.Peek() != '[')
+                        {
+                            exitLoop = true;
+                        }
+                        else
+                        {
+                            paranthesis.Pop();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                if (exitLoop)
+                {
+                    break;
+                }
+
+            }
+            if (exitLoop || paranthesis.Count != 0)
+            {
+                Console.WriteLine($"\"{input}\" är inte välformad");
+            }
+            else
+            {
+                Console.WriteLine($"\"{input}\" är välformad");
+            }
         }
 
     }
